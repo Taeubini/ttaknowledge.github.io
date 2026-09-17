@@ -1,294 +1,143 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IT Knowledgebase</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-    :root {
-        --bg: #0d1b2e;
-        --surface: #12233b;
-        --surface-raised: #17304f;
-        --line: #2c496f;
-        --line-soft: #1e3654;
-        --text-main: #e7edf5;
-        --text-muted: #8fa5c2;
-        --text-faint: #5c7292;
-        --accent: #e8a33d;
-        --accent-dim: #a8752c;
-        --accent-bg: rgba(232, 163, 61, 0.12);
-        --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-        --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        --radius: 3px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Knowledgebase</title>
+    <style>
+        :root {
+            --bg: #f3f4f6;
+            --surface: #ffffff;
+            --primary: #2563eb;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --radius: 12px;
+        }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 2rem;
+        }
 
-    body {
-        font-family: var(--sans);
-        background-color: var(--bg);
-        background-image:
-            linear-gradient(var(--line-soft) 1px, transparent 1px),
-            linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
-        background-size: 32px 32px;
-        background-position: -1px -1px;
-        color: var(--text-main);
-        line-height: 1.55;
-        padding: 3rem 1.5rem 5rem;
-        min-height: 100vh;
-    }
+        .header {
+            max-width: 1200px;
+            margin: 0 auto 2.5rem auto;
+            text-align: center;
+        }
 
-    ::selection { background: var(--accent); color: #1a1204; }
+        h1 { font-size: 2.2rem; font-weight: 800; color: #1f2937; margin-bottom: 1rem; }
 
-    a, button { font: inherit; color: inherit; }
+        .search-wrapper {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-    /* ---------- Header ---------- */
+        #searchInput {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: 1px solid var(--border);
+            border-radius: 99px;
+            background-color: var(--surface);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
 
-    .header {
-        max-width: 1180px;
-        margin: 0 auto 3rem auto;
-        position: relative;
-        padding-left: 1.1rem;
-        border-left: 2px solid var(--accent);
-    }
+        #searchInput:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+        }
 
-    .eyebrow {
-        font-family: var(--mono);
-        font-size: 0.72rem;
-        letter-spacing: 0.14em;
-        color: var(--accent);
-        margin-bottom: 0.6rem;
-    }
+        .stats {
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
 
-    h1 {
-        font-family: var(--sans);
-        font-size: 2.1rem;
-        font-weight: 700;
-        color: var(--text-main);
-        letter-spacing: -0.01em;
-        margin-bottom: 1.6rem;
-    }
+        #results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-    .search-wrapper {
-        position: relative;
-        max-width: 640px;
-    }
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
 
-    .search-wrapper::before {
-        content: "";
-        position: absolute;
-        left: 1.05rem;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 13px;
-        height: 13px;
-        border: 1.6px solid var(--text-faint);
-        border-radius: 50%;
-        pointer-events: none;
-    }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
 
-    .search-wrapper::after {
-        content: "";
-        position: absolute;
-        left: 1.62rem;
-        top: 58%;
-        width: 6px;
-        height: 1.6px;
-        background: var(--text-faint);
-        transform: rotate(45deg);
-        pointer-events: none;
-    }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
 
-    #searchInput {
-        width: 100%;
-        padding: 0.95rem 3.2rem 0.95rem 2.6rem;
-        font-family: var(--mono);
-        font-size: 0.95rem;
-        color: var(--text-main);
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        background-color: var(--surface);
-        outline: none;
-        transition: border-color 0.15s, box-shadow 0.15s;
-    }
+        .card-title { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+        
+        .card-category {
+            background: #e0e7ff;
+            color: #4338ca;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 99px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
 
-    #searchInput::placeholder { color: var(--text-faint); }
+        .card-content {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.82rem;
+            color: #374151;
+            background: #f9fafb;
+            padding: 0.8rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 250px;
+            overflow-y: auto;
+        }
 
-    #searchInput:focus {
-        border-color: var(--accent);
-        box-shadow: 0 0 0 3px var(--accent-bg);
-    }
+        mark { background-color: #fde047; color: #854d0e; padding: 0 2px; border-radius: 2px; }
 
-    .kbd-hint {
-        position: absolute;
-        right: 0.7rem;
-        top: 50%;
-        transform: translateY(-50%);
-        font-family: var(--mono);
-        font-size: 0.72rem;
-        color: var(--text-faint);
-        border: 1px solid var(--line);
-        border-radius: 3px;
-        padding: 0.15rem 0.4rem;
-        pointer-events: none;
-    }
-
-    .stats {
-        margin-top: 0.75rem;
-        font-family: var(--mono);
-        font-size: 0.78rem;
-        color: var(--text-muted);
-    }
-
-    /* ---------- Results grid ---------- */
-
-    #results {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-        gap: 1.1rem;
-        max-width: 1180px;
-        margin: 0 auto;
-    }
-
-    .card {
-        position: relative;
-        background: var(--surface);
-        border: 1px solid var(--line);
-        padding: 1.3rem 1.3rem 1.1rem;
-        display: flex;
-        flex-direction: column;
-        transition: border-color 0.15s, transform 0.15s;
-    }
-
-    /* corner brackets instead of a uniform card shadow */
-    .card::before, .card::after {
-        content: "";
-        position: absolute;
-        width: 9px;
-        height: 9px;
-        opacity: 0;
-        transition: opacity 0.15s;
-    }
-    .card::before {
-        top: -1px; left: -1px;
-        border-top: 2px solid var(--accent-dim);
-        border-left: 2px solid var(--accent-dim);
-    }
-    .card::after {
-        bottom: -1px; right: -1px;
-        border-bottom: 2px solid var(--accent-dim);
-        border-right: 2px solid var(--accent-dim);
-    }
-    .card:hover { border-color: var(--line-soft); transform: translateY(-1px); }
-    .card:hover::before, .card:hover::after { opacity: 1; }
-
-    .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 0.9rem;
-        margin-bottom: 0.9rem;
-    }
-
-    .card-title {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--text-main);
-        line-height: 1.35;
-    }
-
-    .card-category {
-        flex-shrink: 0;
-        font-family: var(--mono);
-        font-size: 0.66rem;
-        letter-spacing: 0.06em;
-        color: var(--accent);
-        border: 1px solid var(--accent-dim);
-        padding: 0.2rem 0.5rem;
-        border-radius: 2px;
-        white-space: nowrap;
-    }
-
-    .card-content-wrap { position: relative; }
-
-    .card-content {
-        font-family: var(--mono);
-        font-size: 0.8rem;
-        color: #c3d2e6;
-        background: #0a1729;
-        padding: 0.85rem;
-        padding-right: 2.6rem;
-        border-radius: 2px;
-        border: 1px solid var(--line-soft);
-        white-space: pre-wrap;
-        word-break: break-word;
-        max-height: 260px;
-        overflow-y: auto;
-    }
-
-    .copy-btn {
-        position: absolute;
-        top: 0.55rem;
-        right: 0.55rem;
-        width: 1.7rem;
-        height: 1.7rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--surface-raised);
-        border: 1px solid var(--line);
-        border-radius: 2px;
-        color: var(--text-muted);
-        cursor: pointer;
-        transition: color 0.15s, border-color 0.15s;
-    }
-    .copy-btn:hover { color: var(--accent); border-color: var(--accent-dim); }
-    .copy-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
-    .copy-btn svg { width: 13px; height: 13px; }
-    .copy-btn.copied { color: var(--accent); border-color: var(--accent); }
-
-    mark {
-        background-color: var(--accent);
-        color: #1a1204;
-        padding: 0 2px;
-        border-radius: 1px;
-    }
-
-    .empty-state {
-        grid-column: 1 / -1;
-        text-align: center;
-        padding: 4rem 1rem;
-        color: var(--text-faint);
-        font-family: var(--mono);
-        font-size: 0.85rem;
-        border: 1px dashed var(--line);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        * { transition: none !important; }
-    }
-
-    @media (max-width: 640px) {
-        #results { grid-template-columns: 1fr; }
-        body { padding: 2rem 1rem 4rem; }
-        h1 { font-size: 1.6rem; }
-        .kbd-hint { display: none; }
-    }
-</style>
+        @media (max-width: 600px) {
+            #results { grid-template-columns: 1fr; }
+            body { padding: 1rem; }
+        }
+    </style>
 </head>
 <body>
 
     <div class="header">
-        <div class="eyebrow">INTERNAL — SYSTEM DOCUMENTATION</div>
         <h1>IT Knowledgebase</h1>
-        <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="Titel, Kategorie oder Inhalt durchsuchen…" autocomplete="off">
-            <span class="kbd-hint">/</span>
+        .search-wrapper">
+            <input type="text" id="searchInput" placeholder="Volltextsuche in Titeln, Kategorien und Inhalten..." autocomplete="off">
         </div>
-        <div class="stats" id="stats">Lade Daten…</div>
+        <div class="stats" id="stats">Lade Daten...</div>
     </div>
 
     <main id="results"></main>
@@ -299,33 +148,21 @@
         const resultsContainer = document.getElementById('results');
         const stats = document.getElementById('stats');
 
-        // --- escaping helpers (prevents stored-XSS from data.json content) ---
-        function escapeHtml(str) {
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
-
-        function escapeRegex(str) {
-            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        }
-
         fetch('data.json')
             .then(response => response.json())
             .then(data => {
                 db = data.map(item => {
                     let rawContent = item.content || '';
+                    // Falls versehentlich JSON-Reste im Content stecken, diese bereinigen
                     if (typeof rawContent === 'object') {
                         rawContent = JSON.stringify(rawContent);
                     }
+                    // Entfernt Artefakte wie {"value":"..."} falls vorhanden
                     if (rawContent.startsWith('{"value":')) {
                         try {
                             const parsed = JSON.parse(rawContent);
                             rawContent = parsed.value || rawContent;
-                        } catch (e) {}
+                        } catch(e) {}
                     }
                     return {
                         title: String(item.title || ''),
@@ -337,7 +174,7 @@
                 renderResults(db);
             })
             .catch(error => {
-                stats.textContent = 'Fehler beim Laden der data.json.';
+                stats.textContent = "Fehler beim Laden der data.json.";
                 console.error(error);
             });
 
@@ -347,81 +184,48 @@
                 renderResults(db);
                 return;
             }
-            const filtered = db.filter(item =>
-                item.title.toLowerCase().includes(query) ||
-                item.content.toLowerCase().includes(query) ||
+
+            const filtered = db.filter(item => 
+                item.title.toLowerCase().includes(query) || 
+                item.content.toLowerCase().includes(query) || 
                 item.category.toLowerCase().includes(query)
             );
+            
             renderResults(filtered, query);
         });
 
-        // "/" focuses search from anywhere; Escape clears and blurs
-        document.addEventListener('keydown', (e) => {
-            if (e.key === '/' && document.activeElement !== searchInput) {
-                e.preventDefault();
-                searchInput.focus();
-            } else if (e.key === 'Escape' && document.activeElement === searchInput) {
-                searchInput.value = '';
-                renderResults(db);
-                searchInput.blur();
-            }
-        });
-
-        function highlight(escapedText, query) {
-            if (!query) return escapedText;
-            const safeQuery = escapeRegex(escapeHtml(query));
-            const regex = new RegExp(`(${safeQuery})`, 'gi');
-            return escapedText.replace(regex, '<mark>$1</mark>');
-        }
-
-        function renderResults(items, query = '') {
-            resultsContainer.innerHTML = '';
-            stats.textContent = query
-                ? `${items.length} Treffer für "${query}"`
-                : `${items.length} Einträge insgesamt`;
+        function renderResults(items, query = "") {
+            resultsContainer.innerHTML = "";
+            stats.textContent = query ? `${items.length} Treffer für "${query}"` : `${items.length} Einträge insgesamt`;
 
             if (items.length === 0) {
-                resultsContainer.innerHTML = `<div class="empty-state">Keine Einträge gefunden für "${escapeHtml(query)}".</div>`;
+                resultsContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #6b7280; padding: 3rem;">Keine Einträge gefunden.</div>`;
                 return;
             }
 
-            const frag = document.createDocumentFragment();
-
-            items.forEach((item, i) => {
+            items.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'card';
-
-                const safeTitle = highlight(escapeHtml(item.title), query);
-                const safeCategory = escapeHtml(item.category);
-                const safeContent = highlight(escapeHtml(item.content), query);
+                
+                let displayTitle = item.title;
+                let displayContent = item.content;
+                
+                if (query) {
+                    const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const regex = new RegExp(`(${safeQuery})`, 'gi');
+                    displayTitle = displayTitle.replace(regex, '<mark>$1</mark>');
+                    displayContent = displayContent.replace(regex, '<mark>$1</mark>');
+                }
 
                 card.innerHTML = `
                     <div class="card-header">
-                        <div class="card-title">${safeTitle}</div>
-                        <div class="card-category">${safeCategory}</div>
+                        <div class="card-title">${displayTitle}</div>
+                        <div class="card-category">${item.category}</div>
                     </div>
-                    <div class="card-content-wrap">
-                        <div class="card-content" id="content-${i}">${safeContent}</div>
-                        <button class="copy-btn" type="button" title="Inhalt kopieren" data-index="${i}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="1"></rect>
-                                <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path>
-                            </svg>
-                        </button>
-                    </div>
+                    <div class="card-content">${displayContent}</div>
                 `;
-                frag.appendChild(card);
-
-                const btn = card.querySelector('.copy-btn');
-                btn.addEventListener('click', () => {
-                    navigator.clipboard.writeText(item.content).then(() => {
-                        btn.classList.add('copied');
-                        setTimeout(() => btn.classList.remove('copied'), 1200);
-                    }).catch(() => {});
-                });
+                resultsContainer.appendChild(card);
             });
-
-            resultsContainer.appendChild(frag);
         }
     </script>
 </body>
