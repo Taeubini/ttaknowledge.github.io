@@ -9,17 +9,16 @@
             --bg: #f3f4f6;
             --surface: #ffffff;
             --primary: #2563eb;
-            --primary-hover: #1d4ed8;
             --text-main: #111827;
             --text-muted: #6b7280;
             --border: #e5e7eb;
-            --radius: 16px;
+            --radius: 12px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg);
             color: var(--text-main);
             line-height: 1.5;
@@ -28,17 +27,11 @@
 
         .header {
             max-width: 1200px;
-            margin: 0 auto 3rem auto;
+            margin: 0 auto 2.5rem auto;
             text-align: center;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #1f2937;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.025em;
-        }
+        h1 { font-size: 2.2rem; font-weight: 800; color: #1f2937; margin-bottom: 1rem; }
 
         .search-wrapper {
             position: relative;
@@ -48,42 +41,31 @@
 
         #searchInput {
             width: 100%;
-            padding: 1.2rem 1.5rem 1.2rem 3rem;
+            padding: 1rem 1.5rem;
             font-size: 1.1rem;
             border: 1px solid var(--border);
             border-radius: 99px;
             background-color: var(--surface);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            transition: all 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         #searchInput:focus {
-            outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
         }
 
-        .search-icon {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 20px;
-            height: 20px;
-            color: var(--text-muted);
-        }
-
         .stats {
-            margin-top: 1rem;
+            margin-top: 0.8rem;
             font-size: 0.9rem;
             color: var(--text-muted);
             font-weight: 500;
         }
 
-        /* Modern Grid Layout */
         #results {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 1.5rem;
             max-width: 1200px;
             margin: 0 auto;
@@ -97,11 +79,11 @@
             display: flex;
             flex-direction: column;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-2px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
@@ -113,47 +95,36 @@
             gap: 1rem;
         }
 
-        .card-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
+        .card-title { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+        
         .card-category {
             background: #e0e7ff;
             color: #4338ca;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
-            padding: 0.25rem 0.75rem;
+            padding: 0.2rem 0.6rem;
             border-radius: 99px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
             white-space: nowrap;
         }
 
-        /* Monospace font for IT configs & scripts */
         .card-content {
             font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: #374151;
             background: #f9fafb;
-            padding: 1rem;
-            border-radius: 8px;
+            padding: 0.8rem;
+            border-radius: 6px;
             border: 1px solid var(--border);
             white-space: pre-wrap;
-            overflow-x: auto;
-            flex-grow: 1;
-        }
-        
-        mark {
-            background-color: #fde047;
-            color: #854d0e;
-            padding: 0 0.2em;
-            border-radius: 4px;
-            font-weight: 600;
+            word-break: break-word;
+            max-height: 250px;
+            overflow-y: auto;
         }
 
-        @media (max-width: 768px) {
+        mark { background-color: #fde047; color: #854d0e; padding: 0 2px; border-radius: 2px; }
+
+        @media (max-width: 600px) {
             #results { grid-template-columns: 1fr; }
             body { padding: 1rem; }
         }
@@ -164,10 +135,7 @@
     <div class="header">
         <h1>IT Knowledgebase</h1>
         <div class="search-wrapper">
-            <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-            <input type="text" id="searchInput" placeholder="Suche in Skripten, Configs und Titeln..." autocomplete="off">
+            <input type="text" id="searchInput" placeholder="Volltextsuche in Titeln, Kategorien und Inhalten..." autocomplete="off">
         </div>
         <div class="stats" id="stats">Lade Daten...</div>
     </div>
@@ -183,12 +151,17 @@
         fetch('data.json')
             .then(response => response.json())
             .then(data => {
-                db = data;
+                // Konvertiert jedes Element sicher in Strings, falls noch Objekte existieren
+                db = data.map(item => ({
+                    title: typeof item.title === 'string' ? item.title : JSON.stringify(item.title || ''),
+                    content: typeof item.content === 'string' ? item.content : JSON.stringify(item.content || ''),
+                    category: typeof item.category === 'string' ? item.category : String(item.category || '')
+                }));
                 stats.textContent = `${db.length} Einträge geladen`;
                 renderResults(db);
             })
             .catch(error => {
-                stats.textContent = "Fehler: data.json nicht gefunden oder fehlerhaft.";
+                stats.textContent = "Fehler beim Laden der data.json.";
                 console.error(error);
             });
 
@@ -199,14 +172,11 @@
                 return;
             }
 
-            const filtered = db.filter(item => {
-                // Sicherheitsprüfung, falls doch mal ein Wert fehlt
-                const title = item.title ? String(item.title).toLowerCase() : "";
-                const content = item.content ? String(item.content).toLowerCase() : "";
-                const category = item.category ? String(item.category).toLowerCase() : "";
-                
-                return title.includes(query) || content.includes(query) || category.includes(query);
-            });
+            const filtered = db.filter(item => 
+                item.title.toLowerCase().includes(query) || 
+                item.content.toLowerCase().includes(query) || 
+                item.category.toLowerCase().includes(query)
+            );
             
             renderResults(filtered, query);
         });
@@ -215,15 +185,19 @@
             resultsContainer.innerHTML = "";
             stats.textContent = query ? `${items.length} Treffer für "${query}"` : `${items.length} Einträge insgesamt`;
 
+            if (items.length === 0) {
+                resultsContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #6b7280; padding: 3rem;">Keine Einträge gefunden.</div>`;
+                return;
+            }
+
             items.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 
-                let displayTitle = item.title || "Ohne Titel";
-                let displayContent = item.content || "Kein Inhalt";
+                let displayTitle = item.title;
+                let displayContent = item.content;
                 
                 if (query) {
-                    // Escapen von Regex-Sonderzeichen im Suchbegriff
                     const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                     const regex = new RegExp(`(${safeQuery})`, 'gi');
                     displayTitle = displayTitle.replace(regex, '<mark>$1</mark>');
